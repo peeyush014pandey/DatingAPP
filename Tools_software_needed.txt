@@ -1,0 +1,7 @@
+## recommended Tools/software needed
+
+1- .Net SDK
+2- Node js
+3- Visual Studio code (open source code editor)
+4- Postman
+5- DB browser for sql lite
