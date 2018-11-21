@@ -1,0 +1,45 @@
+https://angular.io/guide/http
+https://www.concretepage.com/angular-2/angular-2-http-post-example
+
+1- Install latest Node js 
+2- Install dot net SDK
+3- install angular cli  (npm install @angular/cli@latest -g)
+
+app module
+main.ts
+angular.json (web pack is a tool that transpiles the code that browser can understand)
+
+
+Angular switcher extension shortcuts:
+alt + O = if on .ts/.spec.ts/.css go to  html or viceversa
+alt + i = if on .ts/.spec.ts/.html go to css or viceversa
+alt + u = jump to ts from .css/.spec.ts/.html or viceversa
+alt + p = jump to spec.ts from .ts/.ts/.html or viceversa
+
+Token authentication
+
+1- create claims from the credentials received from database after successful login.
+		var Claims = new[]
+            {
+                new Claim(ClaimTypes.NameIdentifier,userFromRepo.Id.ToString()),
+                new Claim(ClaimTypes.Name, userForLoginDto.Username)
+            };
+2- then create the key to sign the credentials
+		var key = new SymmetricSecurityKey(Encoding.UTF8.
+                        GetBytes(_config.GetSection("AppSettings:Token").Value));
+3- and then sign the crdentials using the key generated
+		var creds = new SigningCredentials(key , SecurityAlgorithms.HmacSha512Signature);
+4- then create a token descriptor, which will contain the information like claims , expiry and signing credentials
+		var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(Claims),
+                Expires = DateTime.Now.AddDays(1),
+                SigningCredentials = creds
+            };
+5- then create the token handler from JwtSecurityTokenHandler
+		var tokenHandler = new JwtSecurityTokenHandler();
+6- and then create the token from this handler  
+		var token = tokenHandler.CreateToken(tokenDescriptor);
+7- and then return the token created
+			return Ok(new { 
+                token = tokenHandler.WriteToken(token)});
